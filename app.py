@@ -11,6 +11,7 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
+# Colorful CSS with ALL text white (including conversation text) + visible sidebar selectbox
 def set_colorful_style():
     st.markdown(
         """
@@ -39,13 +40,19 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        /* Force ALL text to white (everywhere) */
+        /* Force ALL text to white everywhere (including st.text, st.markdown, labels, etc.) */
         html, body, .stApp, .stMarkdown, .stText, .stRadio label, .stSelectbox label, 
         .stTextInput label, .stButton button, .stTitle, .stSubheader, .stHeader, 
         .stCaption, .stAlert, .stException, .stCodeBlock, .stDataFrame, .stTable,
         .stTabs [role="tab"], .stTabs [role="tablist"] button, .stExpander,
-        .stProgress > div, .stMetric label, .stMetric value {
+        .stProgress > div, .stMetric label, .stMetric value,
+        div, p, span, pre, code, .element-container, .stTextArea label {
             color: white !important;
+        }
+        /* Specifically for conversation text (st.text) */
+        .stText {
+            color: white !important;
+            font-size: 1rem;
         }
         /* Tabs text (white) */
         .stTabs [role="tab"] {
@@ -77,7 +84,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar (dark background) */
+        /* Sidebar (already dark, but ensure text white) */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -86,12 +93,11 @@ def set_colorful_style():
         section[data-testid="stSidebar"] label {
             color: white !important;
         }
-        /* ===== FIX: Make sidebar selectbox (lesson dropdown) visible ===== */
+        /* ----- FIX: Make sidebar lesson selector (selectbox) visible ----- */
         section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] {
             background-color: #2d1b4e;
             border: 1px solid #ffcc00;
             border-radius: 10px;
-            color: white !important;
         }
         section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] div {
             color: white !important;
