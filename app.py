@@ -77,7 +77,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar (dark background) – ensure text white and selectbox visible */
+        /* Sidebar (dark background) */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -86,11 +86,12 @@ def set_colorful_style():
         section[data-testid="stSidebar"] label {
             color: white !important;
         }
-        /* Fix the lesson number dropdown (selectbox) – make it visible */
+        /* ===== FIX: Make sidebar selectbox (lesson dropdown) visible ===== */
         section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] {
             background-color: #2d1b4e;
             border: 1px solid #ffcc00;
             border-radius: 10px;
+            color: white !important;
         }
         section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] div {
             color: white !important;
