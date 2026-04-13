@@ -11,7 +11,7 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS for login and main pages
+# Colorful CSS with readable white text for lesson content
 def set_colorful_style():
     st.markdown(
         """
@@ -19,6 +19,7 @@ def set_colorful_style():
         .stApp {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e, #1a0b2e);
         }
+        /* Make all main text white */
         .main-header {
             background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
             padding: 1.5rem;
@@ -51,11 +52,33 @@ def set_colorful_style():
             transform: scale(1.02);
             background: rgba(255,255,255,0.2);
         }
-        .quiz-option {
+        /* Force white text for all markdown, text, labels, radio options */
+        .stMarkdown, .stText, .stRadio label, .stSelectbox label, .stTextInput label {
+            color: white !important;
+        }
+        /* Conversation text area (using st.text) */
+        .stText {
+            color: white !important;
+            font-size: 1rem;
+        }
+        /* Quiz options background */
+        .stRadio [role="radiogroup"] label {
             background: rgba(255,255,255,0.15);
             border-radius: 10px;
-            padding: 0.5rem;
+            padding: 0.3rem;
             margin: 0.2rem 0;
+            color: white !important;
+        }
+        /* Buttons */
+        .stButton button {
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+        .stButton button:hover {
+            background-color: #feca57;
+            color: black;
         }
         </style>
         """,
@@ -142,8 +165,6 @@ with st.sidebar:
 # ------------------------------
 # LESSON DATA GENERATION (20 lessons with realistic content)
 # ------------------------------
-# We'll create a function that returns lesson content for a given lesson number.
-# To keep the code manageable, we define topics for each lesson and then generate vocabulary, grammar, etc.
 topics = [
     "Introducing Yourself", "Daily Routine", "At the Supermarket", "Ordering Food", "Asking for Directions",
     "Talking about Family", "At the Doctor's Office", "Job Interview", "Planning a Trip", "Weather and Seasons",
@@ -152,23 +173,19 @@ topics = [
 ]
 
 def generate_conversations(topic):
-    # Three different conversations related to the topic
     conv1 = f"A: Hello! How are you doing today?\nB: I'm great, thanks! I'm learning about {topic}.\nA: That's wonderful. Can you tell me more?\nB: Sure! I practice every day."
     conv2 = f"A: Excuse me, could you help me with {topic}?\nB: Of course! What do you need to know?\nA: I want to improve my English.\nB: That's a great goal. Keep practicing!"
     conv3 = f"A: Hi, I'm new here. Can you explain {topic} to me?\nB: Absolutely! It's very useful for everyday life.\nA: Thank you so much!\nB: You're welcome. Let's practice together."
     return [conv1, conv2, conv3]
 
 def generate_vocabulary(topic):
-    # Return list of 20 words related to the topic (simulated)
     base_words = ["hello", "goodbye", "please", "thank you", "yes", "no", "maybe", "always", "sometimes", "never",
                   "quickly", "slowly", "carefully", "happily", "sadly", "loudly", "quietly", "brightly", "darkly", "softly"]
-    # Add topic-specific words (simplified)
     topic_words = [topic.lower().replace(" ", "_") + str(i) for i in range(1, 6)]
     all_words = base_words[:15] + topic_words
     return all_words[:20]
 
 def generate_grammar_rules(topic):
-    # 10 grammar rules (simplified)
     rules = [
         "1. Use present simple for facts and routines.",
         "2. Use 'to be' (am/is/are) to describe states.",
@@ -181,12 +198,10 @@ def generate_grammar_rules(topic):
         "9. Use 'would like' for polite requests.",
         "10. Use 'going to' for future plans."
     ]
-    # Shuffle slightly to give variety
     random.shuffle(rules)
     return rules
 
 def generate_pronunciation_sentences(topic):
-    # 5 sentences containing key words from the topic
     sentences = [
         f"I am learning about {topic} today.",
         f"Could you please explain {topic} to me?",
@@ -197,8 +212,6 @@ def generate_pronunciation_sentences(topic):
     return sentences
 
 def generate_quiz_questions(topic, conv_texts):
-    # 5 multiple choice questions based on conversations
-    # For simplicity, we create generic questions
     questions = [
         {"question": "What is the main topic of this lesson?", "options": [topic, "Sports", "Music", "Movies"], "answer": topic},
         {"question": "Which word means 'to say thank you'?", "options": ["Please", "Sorry", "Thank you", "Excuse me"], "answer": "Thank you"},
@@ -208,7 +221,6 @@ def generate_quiz_questions(topic, conv_texts):
     ]
     return questions
 
-# Cache lesson data to avoid recomputation
 @st.cache_data
 def get_lesson_data(lesson_num):
     topic = topics[lesson_num - 1]
