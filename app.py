@@ -11,7 +11,7 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS with white text everywhere (login, main content, sidebar)
+# Colorful CSS with ALL text white (login, main content, sidebar, tabs)
 def set_colorful_style():
     st.markdown(
         """
@@ -40,31 +40,31 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        /* Login page text (title, subtitle, labels, button) – all white */
-        .login-container h2, .login-container p, .login-container label, .login-container .stTextInput label {
+        /* Force ALL text to white (everywhere except the header's special colors) */
+        html, body, .stApp, .stMarkdown, .stText, .stRadio label, .stSelectbox label, 
+        .stTextInput label, .stButton button, .stTitle, .stSubheader, .stHeader, 
+        .stCaption, .stAlert, .stException, .stCodeBlock, .stDataFrame, .stTable,
+        .stTabs [role="tab"], .stTabs [role="tablist"] button, .stExpander,
+        .stProgress > div, .stMetric label, .stMetric value {
             color: white !important;
         }
-        .login-container .stButton button {
-            background-color: #ff6b6b;
-            color: white;
-        }
-        /* Main content area – white text on purple background */
-        .main-content {
-            background: transparent;
-        }
-        .main-content .stMarkdown,
-        .main-content .stText,
-        .main-content .stRadio label,
-        .main-content .stSelectbox label,
-        .main-content .stTextInput label {
+        /* Specifically for the login page title "Login Required" */
+        .stApp h1, .stApp h2, .stApp h3, .stApp p, .stApp label {
             color: white !important;
         }
-        .main-content .stText {
+        /* Tabs text (white) */
+        .stTabs [role="tab"] {
             color: white !important;
-            font-size: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin: 0 2px;
         }
-        /* Quiz radio button options – semi-transparent background with white text */
-        .main-content .stRadio [role="radiogroup"] label {
+        .stTabs [role="tab"][aria-selected="true"] {
+            background: rgba(255,255,255,0.3);
+            color: white !important;
+        }
+        /* Quiz radio button options */
+        .stRadio [role="radiogroup"] label {
             background: rgba(255,255,255,0.15);
             border-radius: 10px;
             padding: 0.3rem;
@@ -82,7 +82,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar remains dark with white text */
+        /* Sidebar (already dark, but ensure text white) */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -122,13 +122,11 @@ if "authenticated" not in st.session_state:
 
 if not st.session_state.authenticated:
     set_colorful_style()
-    # Wrap login content in a div with class "login-container" for white text
-    st.markdown('<div class="login-container">', unsafe_allow_html=True)
     st.title("🔐 Login Required")
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         show_logo()
-        st.markdown("<h2 style='text-align: center; color: white;'>Let's Learn English with Gesner</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>Let's Learn English with Gesner</h2>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; color: #FFD700;'>Book 1 – Lessons 1 to 20</p>", unsafe_allow_html=True)
         password_input = st.text_input("Enter password to access", type="password")
         if st.button("Login"):
@@ -137,7 +135,6 @@ if not st.session_state.authenticated:
                 st.rerun()
             else:
                 st.error("Incorrect password. Access denied.")
-    st.markdown('</div>', unsafe_allow_html=True)
     st.stop()
 
 # ------------------------------
@@ -151,9 +148,6 @@ st.markdown("""
     <p>Book 1 – 20 interactive lessons | Everyday conversations | Vocabulary | Grammar | Pronunciation | Quizzes</p>
 </div>
 """, unsafe_allow_html=True)
-
-# Wrap the entire lesson content in a div with class "main-content"
-st.markdown('<div class="main-content">', unsafe_allow_html=True)
 
 # ------------------------------
 # SIDEBAR – LESSON SELECTOR & COMPANY INFO
@@ -325,9 +319,6 @@ with tab5:
         if score == len(lesson_data['quiz']):
             st.balloons()
             st.markdown("🎉 Perfect! You've mastered this lesson.")
-
-# Close the main-content div
-st.markdown('</div>', unsafe_allow_html=True)
 
 # After lesson 20, show contact info
 if lesson_number == 20:
