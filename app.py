@@ -11,24 +11,16 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS with WHITE BACKGROUND for main content area
+# Colorful CSS with white text on purple gradient for main content
 def set_colorful_style():
     st.markdown(
         """
         <style>
-        /* Overall app background (the outer area) remains dark */
+        /* Overall app background – purple gradient */
         .stApp {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e, #1a0b2e);
         }
-        /* Main content container (where tabs and lesson content go) – white background */
-        .main-content {
-            background-color: white;
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        /* Header stays colorful */
+        /* Main header (colorful) */
         .main-header {
             background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
             padding: 1.5rem;
@@ -48,25 +40,29 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        /* All text inside main content area should be dark (black/dark gray) */
+        /* Main content area (no white background) – use transparent so app background shows */
+        .main-content {
+            background: transparent;
+        }
+        /* All text inside main content area should be white */
         .main-content .stMarkdown,
         .main-content .stText,
         .main-content .stRadio label,
         .main-content .stSelectbox label,
         .main-content .stTextInput label {
-            color: #1e1e2f !important;
+            color: white !important;
         }
         .main-content .stText {
-            color: #1e1e2f !important;
+            color: white !important;
             font-size: 1rem;
         }
-        /* Quiz radio button options – light background with dark text */
+        /* Quiz radio button options – semi-transparent background with white text */
         .main-content .stRadio [role="radiogroup"] label {
-            background: #f0f0f0;
+            background: rgba(255,255,255,0.15);
             border-radius: 10px;
             padding: 0.3rem;
             margin: 0.2rem 0;
-            color: #1e1e2f !important;
+            color: white !important;
         }
         /* Buttons */
         .stButton button {
@@ -79,7 +75,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar remains dark with original styling */
+        /* Sidebar remains dark (already matches the app background) */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -146,7 +142,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Wrap the entire lesson content in a div with class "main-content" to apply white background
+# Wrap the entire lesson content in a div with class "main-content" (transparent background, white text)
 st.markdown('<div class="main-content">', unsafe_allow_html=True)
 
 # ------------------------------
