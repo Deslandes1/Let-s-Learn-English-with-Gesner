@@ -11,7 +11,6 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS with ALL text white (including conversation text)
 def set_colorful_style():
     st.markdown(
         """
@@ -40,19 +39,13 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        /* Force ALL text to white everywhere (including st.text, st.markdown, labels, etc.) */
+        /* Force ALL text to white (everywhere) */
         html, body, .stApp, .stMarkdown, .stText, .stRadio label, .stSelectbox label, 
         .stTextInput label, .stButton button, .stTitle, .stSubheader, .stHeader, 
         .stCaption, .stAlert, .stException, .stCodeBlock, .stDataFrame, .stTable,
         .stTabs [role="tab"], .stTabs [role="tablist"] button, .stExpander,
-        .stProgress > div, .stMetric label, .stMetric value,
-        div, p, span, pre, code, .element-container, .stTextArea label {
+        .stProgress > div, .stMetric label, .stMetric value {
             color: white !important;
-        }
-        /* Specifically for conversation text (st.text) */
-        .stText {
-            color: white !important;
-            font-size: 1rem;
         }
         /* Tabs text (white) */
         .stTabs [role="tab"] {
@@ -84,7 +77,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar (already dark, but ensure text white) */
+        /* Sidebar (dark background) – ensure text white and selectbox visible */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -92,6 +85,30 @@ def set_colorful_style():
         section[data-testid="stSidebar"] .stText,
         section[data-testid="stSidebar"] label {
             color: white !important;
+        }
+        /* Fix the lesson number dropdown (selectbox) – make it visible */
+        section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] {
+            background-color: #2d1b4e;
+            border: 1px solid #ffcc00;
+            border-radius: 10px;
+        }
+        section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] div {
+            color: white !important;
+        }
+        section[data-testid="stSidebar"] .stSelectbox svg {
+            fill: white;
+        }
+        /* Dropdown menu items (options) */
+        div[data-baseweb="popover"] ul {
+            background-color: #2d1b4e;
+            border: 1px solid #ffcc00;
+        }
+        div[data-baseweb="popover"] li {
+            color: white !important;
+            background-color: #2d1b4e;
+        }
+        div[data-baseweb="popover"] li:hover {
+            background-color: #ff6b6b;
         }
         </style>
         """,
