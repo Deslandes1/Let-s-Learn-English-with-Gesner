@@ -11,7 +11,7 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS with white text on purple gradient for main content
+# Colorful CSS with white text everywhere (login, main content, sidebar)
 def set_colorful_style():
     st.markdown(
         """
@@ -40,11 +40,18 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        /* Main content area (no white background) – use transparent so app background shows */
+        /* Login page text (title, subtitle, labels, button) – all white */
+        .login-container h2, .login-container p, .login-container label, .login-container .stTextInput label {
+            color: white !important;
+        }
+        .login-container .stButton button {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        /* Main content area – white text on purple background */
         .main-content {
             background: transparent;
         }
-        /* All text inside main content area should be white */
         .main-content .stMarkdown,
         .main-content .stText,
         .main-content .stRadio label,
@@ -75,7 +82,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar remains dark (already matches the app background) */
+        /* Sidebar remains dark with white text */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -115,6 +122,8 @@ if "authenticated" not in st.session_state:
 
 if not st.session_state.authenticated:
     set_colorful_style()
+    # Wrap login content in a div with class "login-container" for white text
+    st.markdown('<div class="login-container">', unsafe_allow_html=True)
     st.title("🔐 Login Required")
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -128,6 +137,7 @@ if not st.session_state.authenticated:
                 st.rerun()
             else:
                 st.error("Incorrect password. Access denied.")
+    st.markdown('</div>', unsafe_allow_html=True)
     st.stop()
 
 # ------------------------------
@@ -142,7 +152,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Wrap the entire lesson content in a div with class "main-content" (transparent background, white text)
+# Wrap the entire lesson content in a div with class "main-content"
 st.markdown('<div class="main-content">', unsafe_allow_html=True)
 
 # ------------------------------
