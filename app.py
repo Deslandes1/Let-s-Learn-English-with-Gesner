@@ -11,7 +11,7 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS with ALL text white (login, main content, sidebar, tabs)
+# Colorful CSS with ALL text white (including conversation text)
 def set_colorful_style():
     st.markdown(
         """
@@ -40,17 +40,19 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        /* Force ALL text to white (everywhere except the header's special colors) */
+        /* Force ALL text to white everywhere (including st.text, st.markdown, labels, etc.) */
         html, body, .stApp, .stMarkdown, .stText, .stRadio label, .stSelectbox label, 
         .stTextInput label, .stButton button, .stTitle, .stSubheader, .stHeader, 
         .stCaption, .stAlert, .stException, .stCodeBlock, .stDataFrame, .stTable,
         .stTabs [role="tab"], .stTabs [role="tablist"] button, .stExpander,
-        .stProgress > div, .stMetric label, .stMetric value {
+        .stProgress > div, .stMetric label, .stMetric value,
+        div, p, span, pre, code, .element-container, .stTextArea label {
             color: white !important;
         }
-        /* Specifically for the login page title "Login Required" */
-        .stApp h1, .stApp h2, .stApp h3, .stApp p, .stApp label {
+        /* Specifically for conversation text (st.text) */
+        .stText {
             color: white !important;
+            font-size: 1rem;
         }
         /* Tabs text (white) */
         .stTabs [role="tab"] {
