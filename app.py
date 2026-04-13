@@ -202,7 +202,7 @@ with st.sidebar:
     st.markdown("🌐 [Main Website](https://globalinternetsitepy-abh7v6tnmskxxnuplrdcgk.streamlit.app/)")
     st.markdown("---")
     st.markdown("### 💰 Price")
-    st.markdown("**$1,200 USD** (full Book 1 – 20 lessons, includes source code)")
+    st.markdown("**$299 USD** (full Book 1 – 20 lessons, includes source code)")
     st.markdown("---")
     st.markdown("### © 2025 GlobalInternet.py")
     st.markdown("All Rights Reserved")
