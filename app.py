@@ -99,16 +99,23 @@ def set_colorful_style():
         section[data-testid="stSidebar"] .stSelectbox label {
             color: white !important;
         }
+        /* The selectbox container */
         section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] {
             background-color: #2d1b4e;
             border: 1px solid #ffcc00;
             border-radius: 10px;
         }
+        /* The text inside the selectbox (selected value) */
         section[data-testid="stSidebar"] .stSelectbox div[data-baseweb="select"] div {
             color: white !important;
         }
+        /* The dropdown arrow icon */
         section[data-testid="stSidebar"] .stSelectbox svg {
             fill: white;
+        }
+        /* Ensure the selected value is visible after selection */
+        section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] span {
+            color: white !important;
         }
         /* Dropdown menu items (options) */
         div[data-baseweb="popover"] ul {
