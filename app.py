@@ -11,7 +11,7 @@ import random
 # ------------------------------
 st.set_page_config(page_title="Let's Learn English with Gesner", layout="wide")
 
-# Colorful CSS with readable white text for lesson content
+# Colorful CSS with white text ONLY for main content area (not sidebar)
 def set_colorful_style():
     st.markdown(
         """
@@ -19,7 +19,7 @@ def set_colorful_style():
         .stApp {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e, #1a0b2e);
         }
-        /* Make all main text white */
+        /* Main header (colorful) */
         .main-header {
             background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb);
             padding: 1.5rem;
@@ -39,29 +39,20 @@ def set_colorful_style():
             font-size: 1.2rem;
             margin: 0;
         }
-        .lesson-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 1rem;
-            margin: 0.5rem;
-            backdrop-filter: blur(5px);
-            color: white;
-            transition: transform 0.2s;
+        /* Main content area (where lessons appear) - make text white */
+        .main-content {
+            color: white !important;
         }
-        .lesson-card:hover {
-            transform: scale(1.02);
-            background: rgba(255,255,255,0.2);
-        }
-        /* Force white text for all markdown, text, labels, radio options */
+        /* All markdown, text, and labels inside the main tabs */
         .stMarkdown, .stText, .stRadio label, .stSelectbox label, .stTextInput label {
             color: white !important;
         }
-        /* Conversation text area (using st.text) */
+        /* Conversation text (using st.text) */
         .stText {
             color: white !important;
             font-size: 1rem;
         }
-        /* Quiz options background */
+        /* Quiz radio button options */
         .stRadio [role="radiogroup"] label {
             background: rgba(255,255,255,0.15);
             border-radius: 10px;
@@ -79,6 +70,12 @@ def set_colorful_style():
         .stButton button:hover {
             background-color: #feca57;
             color: black;
+        }
+        /* Sidebar remains with its original styling (no forced white) */
+        section[data-testid="stSidebar"] .stMarkdown,
+        section[data-testid="stSidebar"] .stText,
+        section[data-testid="stSidebar"] label {
+            color: inherit !important;
         }
         </style>
         """,
@@ -139,7 +136,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ------------------------------
-# SIDEBAR – LESSON SELECTOR & COMPANY INFO (until lesson 20)
+# SIDEBAR – LESSON SELECTOR & COMPANY INFO
 # ------------------------------
 with st.sidebar:
     show_logo()
@@ -163,7 +160,7 @@ with st.sidebar:
     st.markdown("All Rights Reserved")
 
 # ------------------------------
-# LESSON DATA GENERATION (20 lessons with realistic content)
+# LESSON DATA GENERATION (20 lessons)
 # ------------------------------
 topics = [
     "Introducing Yourself", "Daily Routine", "At the Supermarket", "Ordering Food", "Asking for Directions",
@@ -291,7 +288,7 @@ with tab4:
         play_audio(sentence, f"pron_{lesson_number}_{idx}")
         st.markdown("---")
 
-# Tab 5: Quiz
+# Tab 5: Quiz (fixed empty label warning)
 with tab5:
     st.markdown("Test your understanding of this lesson.")
     if f"quiz_answers_{lesson_number}" not in st.session_state:
@@ -299,7 +296,8 @@ with tab5:
     score = 0
     for q_idx, q in enumerate(lesson_data["quiz"]):
         st.markdown(f"**{q_idx+1}. {q['question']}**")
-        answer = st.radio("", q["options"], key=f"quiz_{lesson_number}_{q_idx}", label_visibility="collapsed")
+        # Provide a non-empty label (hidden) to avoid warning
+        answer = st.radio("Choose an answer:", q["options"], key=f"quiz_{lesson_number}_{q_idx}", label_visibility="hidden")
         st.session_state[f"quiz_answers_{lesson_number}"][q_idx] = answer
         if answer == q["answer"]:
             score += 1
