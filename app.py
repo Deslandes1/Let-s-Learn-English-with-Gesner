@@ -86,7 +86,7 @@ def set_colorful_style():
             background-color: #feca57;
             color: black;
         }
-        /* Sidebar (already dark, but ensure text white) */
+        /* Sidebar */
         section[data-testid="stSidebar"] {
             background: linear-gradient(135deg, #1a0b2e, #2d1b4e);
         }
@@ -95,7 +95,6 @@ def set_colorful_style():
         section[data-testid="stSidebar"] label {
             color: white !important;
         }
-        /* ----- FIX: Make sidebar lesson selector (selectbox) visible ----- */
         section[data-testid="stSidebar"] .stSelectbox label {
             color: white !important;
         }
@@ -113,7 +112,7 @@ def set_colorful_style():
         section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] span {
             color: white !important;
         }
-        /* Dropdown menu items (options) */
+        /* Dropdown menu items */
         div[data-baseweb="popover"] ul {
             background-color: #2d1b4e;
             border: 1px solid #ffcc00;
@@ -184,7 +183,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ------------------------------
-# SIDEBAR – LESSON SELECTOR & COMPANY INFO & LOGOUT
+# SIDEBAR
 # ------------------------------
 with st.sidebar:
     show_logo()
@@ -207,13 +206,12 @@ with st.sidebar:
     st.markdown("### © 2025 GlobalInternet.py")
     st.markdown("All Rights Reserved")
     st.markdown("---")
-    # Logout button
     if st.button("🚪 Logout", use_container_width=True):
         st.session_state.authenticated = False
         st.rerun()
 
 # ------------------------------
-# LESSON DATA GENERATION (20 lessons)
+# LESSON DATA GENERATION
 # ------------------------------
 topics = [
     "Introducing Yourself", "Daily Routine", "At the Supermarket", "Ordering Food", "Asking for Directions",
@@ -289,21 +287,13 @@ def get_lesson_data(lesson_num):
     }
 
 # ------------------------------
-# DISPLAY LESSON CONTENT
+# AUDIO HELPERS
 # ------------------------------
-lesson_data = get_lesson_data(lesson_number)
-
-st.markdown(f"## 📖 Lesson {lesson_number}: {lesson_data['topic']}")
-
-# Tabs for different sections
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["💬 Conversations", "📚 Vocabulary", "📖 Grammar", "🎧 Pronunciation", "❓ Quiz"])
-
-# Helper to generate audio from text
 async def text_to_audio(text, filename):
     await edge_tts.Communicate(text, "en-US-GuyNeural").save(filename)
 
 def play_audio(text, key):
-    if st.button(f"🔊 Play Audio", key=key):
+    if st.button(f"🔊", key=key):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
             asyncio.run(text_to_audio(text, tmp.name))
             with open(tmp.name, "rb") as f:
@@ -312,7 +302,14 @@ def play_audio(text, key):
                 st.markdown(f'<audio controls src="data:audio/mp3;base64,{b64}" autoplay style="width: 100%;"></audio>', unsafe_allow_html=True)
             os.unlink(tmp.name)
 
-# Tab 1: Conversations
+# ------------------------------
+# DISPLAY LESSON CONTENT
+# ------------------------------
+lesson_data = get_lesson_data(lesson_number)
+st.markdown(f"## 📖 Lesson {lesson_number}: {lesson_data['topic']}")
+
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["💬 Conversations", "📚 Vocabulary", "📖 Grammar", "🎧 Pronunciation", "❓ Quiz"])
+
 with tab1:
     for i, conv in enumerate(lesson_data["conversations"], 1):
         st.markdown(f"**Conversation {i}**")
@@ -320,7 +317,6 @@ with tab1:
         play_audio(conv, f"conv_{lesson_number}_{i}")
         st.markdown("---")
 
-# Tab 2: Vocabulary
 with tab2:
     cols = st.columns(4)
     for idx, word in enumerate(lesson_data["vocabulary"]):
@@ -328,12 +324,54 @@ with tab2:
             st.markdown(f"**{word.capitalize()}**")
             play_audio(word, f"vocab_{lesson_number}_{idx}")
 
-# Tab 3: Grammar
+# Tab 3: Grammar + THE BASICS
 with tab3:
+    # Existing Grammar Rules
+    st.subheader("💡 Grammar Rules")
     for rule in lesson_data["grammar"]:
         st.markdown(f"- {rule}")
+    
+    st.markdown("---")
+    
+    # NEW SECTION: THE BASICS
+    st.subheader("🌟 The Basics")
+    with st.expander("🔤 The English Alphabet", expanded=True):
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        cols = st.columns(6)
+        for i, letter in enumerate(alphabet):
+            with cols[i % 6]:
+                st.write(f"### {letter}")
+                play_audio(letter, f"alphabet_{letter}_{lesson_number}")
 
-# Tab 4: Pronunciation (listen and repeat)
+    with st.expander("🔢 Numbers (Cardinal & Ordinal)"):
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Cardinal Numbers**")
+            cardinals = ["One", "Two", "Three", "Four", "Five", "Ten", "Twenty", "One Hundred"]
+            for num in cardinals:
+                col_n, col_a = st.columns([3, 1])
+                col_n.write(num)
+                with col_a: play_audio(num, f"card_{num}_{lesson_number}")
+        with c2:
+            st.markdown("**Ordinal Numbers**")
+            ordinals = ["First", "Second", "Third", "Fourth", "Fifth", "Tenth", "Twentieth", "Hundredth"]
+            for num in ordinals:
+                col_n, col_a = st.columns([3, 1])
+                col_n.write(num)
+                with col_a: play_audio(num, f"ord_{num}_{lesson_number}")
+
+    with st.expander("🗣️ Top Idiomatic Expressions"):
+        idioms = [
+            {"phrase": "Break a leg", "meaning": "Good luck! (Often used for performers)"},
+            {"phrase": "Piece of cake", "meaning": "Something that is very easy to do."},
+            {"phrase": "Under the weather", "meaning": "Feeling sick or not well."}
+        ]
+        for idx, item in enumerate(idioms):
+            st.markdown(f"**{item['phrase']}**")
+            st.caption(item['meaning'])
+            play_audio(f"{item['phrase']}. It means {item['meaning']}", f"idiom_{idx}_{lesson_number}")
+            st.markdown("---")
+
 with tab4:
     st.markdown("Listen to each sentence, then repeat aloud.")
     for idx, sentence in enumerate(lesson_data["pronunciation"]):
@@ -341,7 +379,6 @@ with tab4:
         play_audio(sentence, f"pron_{lesson_number}_{idx}")
         st.markdown("---")
 
-# Tab 5: Quiz
 with tab5:
     st.markdown("Test your understanding of this lesson.")
     if f"quiz_answers_{lesson_number}" not in st.session_state:
