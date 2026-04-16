@@ -4,7 +4,7 @@ import tempfile
 import base64
 import os
 
-# ----- Audio Setup -----
+# ----- Audio Setup (same as Spanish version, using edge_tts) -----
 try:
     import edge_tts
     import nest_asyncio
@@ -250,14 +250,14 @@ st.markdown(f"## 📖 Lesson {lesson_number}: {lesson_data['topic']}")
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["💬 Conversations", "📚 Vocabulary", "📖 Grammar", "🎧 Pronunciation", "❓ Quiz"])
 
-# ----- Audio function -----
+# ----- Audio function (same as Spanish version) -----
 async def save_speech(text, file_path):
     communicate = edge_tts.Communicate(text, "en-US-JennyNeural")
     await communicate.save(file_path)
 
 def play_audio(text, key):
     if not EDGE_TTS_AVAILABLE:
-        st.info("🔇 Audio disabled")
+        st.info("🔇 Audio disabled. Please install edge-tts.")
         return
     if st.button(f"🔊", key=key):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
